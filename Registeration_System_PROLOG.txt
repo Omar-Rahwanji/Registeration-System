@@ -1,0 +1,54 @@
+%This program could be run on https://swish.swi-prolog.org 
+
+canRegister(B, F) :-
+    (   B>=F
+    	->  writeln('And you can register, since your balance is greater than or equal the fees.')
+    ;   
+    	writeln('But you cannot register, since your balance is lower than the fees!')
+	).
+
+calcFees(H, B) :-
+	prompt(_, 'Enter your major: '),
+	read(Major),
+    (   Major == cs
+    	-> writeln('Your registeration fees are:'),
+		Fees is 100*H+300,
+        writeln($Fees),
+    	canRegister(B, Fees)
+	
+    ;  
+    	(   Major == se
+        	-> writeln('Your registeration fees are:'),
+			Fees is 90*H+300,
+        	writeln($Fees),
+    		canRegister(B, Fees)
+        )
+    ;  
+    	(   Major == ds
+        	-> writeln('Your registeration fees are:'),
+			Fees is 110*H+300,
+        	writeln($Fees),
+    		canRegister(B, Fees)
+        )
+    ;   
+    	writeln('Major can be either cs, se or ds!'),
+        calcFees(H, B)
+    ).
+
+registration :-
+	prompt(_, 'Enter your balance amount: '),
+	read(Balance),
+	
+	prompt(_, 'Enter the number of hours: '),
+	read(Hours),
+    (   Hours > 18
+    	-> writeln('Hours should not exceed 18!'), 
+    	registration 
+    ;   
+    	(   Hours < 12
+        	-> writeln('Hours should not be less than 12!'), 
+    		registration 
+        )
+    ;   
+        calcFees(Hours, Balance)
+    ).
